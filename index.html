@@ -1,502 +1,197 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Paolo Hair Stylist — Parrucchiere a Bologna</title>
-<meta name="description" content="Paolo Hair Stylist, parrucchiere a Bologna. Via Milazzo 19/B. 75 recensioni Google 5 stelle. Taglio, colore, barba. Tel +39 331 276 3139."/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Paolo Hair Stylist — Bologna</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{--blu:#1a2744;--blu-d:#111c33;--blu-l:#eef1f8;--blu-m:#8fa3c8;--w:#fff;--off:#f5f7fb;--text:#0d1520;--t2:#4a5568;--t3:#8a9ab5;--border:#dce4f0;--wa:#25D366}
-html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;color:var(--text);background:var(--w);overflow-x:hidden}
-
-nav{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;font-style:italic;color:var(--text)}
-.nav-logo em{color:var(--blu);font-style:normal}
-.nav-links{display:flex;gap:1.75rem;align-items:center}
-.nav-links a{font-size:12px;color:var(--t2);text-decoration:none;transition:color .15s}
-.nav-links a:hover{color:var(--blu)}
-.nav-cta{background:var(--wa)!important;color:#fff!important;padding:7px 16px;border-radius:50px;font-weight:500!important}
-@media(max-width:768px){.nav-links a:not(.nav-cta){display:none}}
-
-.pbanner{background:var(--blu);color:#fff;text-align:center;padding:9px 1rem;font-size:11px;font-weight:500;letter-spacing:.5px;position:sticky;top:60px;z-index:190}
-.pbanner span{opacity:.65;font-weight:300}
-
-.hero{position:relative;height:100svh;min-height:600px;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1600&q=85') center/cover no-repeat}
-.hero-ov{position:absolute;inset:0;background:linear-gradient(170deg,rgba(10,16,36,.80) 0%,rgba(26,39,68,.35) 55%,rgba(10,16,36,.75) 100%)}
-.hero-c{position:relative;z-index:2;padding:0 1.5rem;max-width:720px}
-.hero-tag{font-size:11px;letter-spacing:3.5px;text-transform:uppercase;color:var(--blu-m);margin-bottom:1.5rem}
-.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,9vw,6rem);font-weight:500;color:#fff;line-height:.95;font-style:italic;margin-bottom:.4rem}
-.hero-amp{font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,3.5vw,2.4rem);color:var(--blu-m);font-style:italic;display:block;margin-bottom:1.25rem}
-.hero-sub{font-size:15px;color:rgba(255,255,255,.72);margin-bottom:.75rem;font-weight:300;letter-spacing:.4px}
-.hero-addr{font-size:12px;color:rgba(255,255,255,.45);margin-bottom:2.5rem}
-.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.btn-wa{display:inline-flex;align-items:center;gap:9px;background:var(--wa);color:#fff;text-decoration:none;padding:13px 26px;border-radius:50px;font-size:13px;font-weight:500;transition:transform .2s,box-shadow .2s}
-.btn-wa:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(37,211,102,.4)}
-.btn-wa svg{width:17px;height:17px;flex-shrink:0}
-.btn-tel{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.12);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.25);color:#fff;text-decoration:none;padding:13px 26px;border-radius:50px;font-size:13px;transition:background .2s}
-.btn-tel:hover{background:rgba(255,255,255,.2)}
-.btn-tel svg{width:17px;height:17px;flex-shrink:0}
-.hero-rating{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);border-radius:50px;padding:9px 20px;white-space:nowrap}
-.hr-stars{color:#fbbf24;font-size:13px;letter-spacing:2px}
-.hr-score{font-size:14px;color:#fff;font-weight:600}
-.hr-label{font-size:11px;color:rgba(255,255,255,.55)}
-
-.numeri{background:var(--blu);padding:3rem 1.5rem}
-.numeri .container{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:2rem;text-align:center}
-.num-val{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:500;color:var(--blu-m);line-height:1;font-style:italic}
-.num-label{font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1.5px;margin-top:.5rem}
-
-section{padding:5.5rem 1.5rem}
-.container{max-width:1000px;margin:0 auto}
-.s-label{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--blu);margin-bottom:.75rem}
-.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4.5vw,3rem);font-weight:500;color:var(--text);line-height:1.1;margin-bottom:1rem}
-.s-title em{font-style:italic;color:var(--blu)}
-.s-sub{font-size:15px;color:var(--t2);font-weight:300;line-height:1.8;max-width:580px;margin-bottom:2.5rem}
-.divider{width:44px;height:1px;background:var(--blu);margin:0 0 2rem}
-.fade{opacity:0;transform:translateY(22px);transition:opacity .65s,transform .65s}
-.fade.in{opacity:1;transform:none}
-.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
-
-#servizi{background:var(--off)}
-.svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.25rem}
-.svc-card{background:var(--w);border:1px solid var(--border);border-radius:14px;padding:1.75rem 1.5rem;display:flex;flex-direction:column;transition:border-color .2s,transform .2s,box-shadow .2s}
-.svc-card:hover{border-color:var(--blu);transform:translateY(-3px);box-shadow:0 8px 24px rgba(26,39,68,.12)}
-.svc-icon{font-size:1.4rem;margin-bottom:.5rem}
-.svc-name{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--text)}
-.svc-desc{font-size:12px;color:var(--t3);line-height:1.65;margin-top:.35rem;flex:1}
-.svc-price{font-size:1.5rem;font-weight:300;color:var(--blu);margin-top:.85rem}
-.svc-price sup{font-size:.85rem;vertical-align:top;margin-top:.25rem}
-.svc-from{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-top:.2rem}
-.svc-footer{margin-top:2.5rem;text-align:center;font-size:12px;color:var(--t2);padding:1.1rem;border:1px dashed var(--border);border-radius:10px;line-height:1.8}
-
-#chisiamo .inner{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
-.cs-imgs{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
-.cs-imgs .img-main{grid-column:1/-1;border-radius:14px;overflow:hidden;aspect-ratio:16/9}
-.cs-imgs .img-sm{border-radius:10px;overflow:hidden;aspect-ratio:1}
-.cs-imgs img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
-.cs-imgs img:hover{transform:scale(1.04)}
-.cs-body{font-size:15px;line-height:1.95;color:var(--t2);font-weight:300;margin-bottom:1.1rem}
-.cs-valori{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:1.75rem}
-.val-item{background:var(--blu-l);border:1px solid #c5d0e8;border-radius:10px;padding:1rem}
-.val-icon{font-size:1.1rem;margin-bottom:.3rem}
-.val-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:.2rem}
-.val-desc{font-size:11px;color:var(--t2);line-height:1.5}
-
-#galleria{background:var(--off)}
-.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:2rem}
-.g-item{border-radius:12px;overflow:hidden}
-.g-item img{width:100%;height:220px;object-fit:cover;display:block;transition:transform .4s}
-.g-item:hover img{transform:scale(1.05)}
-.g-big{grid-row:span 2}
-.g-big img{height:100%}
-
-#testimonianze{background:var(--blu)}
-#testimonianze .s-label{color:var(--blu-m)}
-#testimonianze .s-title{color:#fff}
-#testimonianze .s-title em{color:var(--blu-m)}
-.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;margin-top:2.5rem}
-.testi-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:1.75rem}
-.testi-stars{color:#fbbf24;font-size:14px;letter-spacing:2px;margin-bottom:1rem}
-.testi-text{font-size:14px;color:rgba(255,255,255,.68);line-height:1.85;font-weight:300;font-style:italic;margin-bottom:1.25rem}
-.testi-author{display:flex;align-items:center;gap:10px}
-.testi-av{width:36px;height:36px;border-radius:50%;background:var(--blu-m);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff;flex-shrink:0}
-.testi-name{font-size:13px;font-weight:500;color:#fff}
-.testi-meta{font-size:11px;color:rgba(255,255,255,.4)}
-.testi-source{margin-top:2rem;text-align:center;font-size:11px;color:rgba(255,255,255,.3);letter-spacing:.5px}
-
-#orari .inner{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
-.orari-wrap{max-width:400px}
-.o-row{display:grid;grid-template-columns:110px 1fr;padding:13px 0;border-bottom:1px solid var(--border)}
-.o-row:last-child{border-bottom:none}
-.o-day{font-size:13px;font-weight:500;color:var(--text)}
-.o-time{font-size:13px;color:var(--t2);font-weight:300}
-.o-closed{color:var(--t3);font-style:italic}
-.o-today{background:var(--blu-l);margin:0 -1rem;padding:13px 1rem;border-radius:8px;border-bottom:none}
-.o-today .o-day{color:var(--blu)}
-.o-today .o-time{color:var(--blu-d);font-weight:500}
-.orari-note{margin-top:1.5rem;padding:1rem 1.25rem;background:var(--off);border:1px solid var(--border);border-radius:10px;font-size:12px;color:var(--t2);line-height:1.75}
-.orari-cta{margin-top:1.5rem}
-.orari-cta a{display:inline-flex;align-items:center;gap:8px;background:var(--wa);color:#fff;text-decoration:none;padding:11px 22px;border-radius:50px;font-size:13px;font-weight:500}
-.orari-cta a svg{width:16px;height:16px}
-
-.faq-item{border-bottom:1px solid var(--border)}
-.faq-q{width:100%;text-align:left;background:none;border:none;padding:1.25rem 0;font-size:14px;font-weight:500;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:1rem;font-family:'Inter',sans-serif}
-.faq-q .arr{font-size:18px;color:var(--blu);transition:transform .2s;flex-shrink:0}
-.faq-item.open .arr{transform:rotate(45deg)}
-.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease}
-.faq-a p{font-size:13px;color:var(--t2);line-height:1.85;font-weight:300;padding-bottom:1.25rem}
-.faq-item.open .faq-a{max-height:300px}
-
-#dove .inner{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
-.dove-info{display:flex;flex-direction:column;gap:1.5rem}
-.dove-item{display:flex;gap:1rem;align-items:flex-start}
-.dove-ico{width:40px;height:40px;border-radius:50%;background:var(--blu-l);border:1px solid #c5d0e8;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.dove-ico svg{width:17px;height:17px;color:var(--blu)}
-.dove-lbl{font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px}
-.dove-val{font-size:14px;color:var(--text);line-height:1.6}
-.dove-val a{color:var(--blu);text-decoration:none}
-.dove-val a:hover{text-decoration:underline}
-.maps-btn{display:inline-flex;align-items:center;gap:8px;margin-top:.75rem;background:var(--blu);color:#fff;text-decoration:none;padding:10px 20px;border-radius:50px;font-size:12px;font-weight:500;transition:background .2s}
-.maps-btn:hover{background:var(--blu-d)}
-.maps-btn svg{width:14px;height:14px}
-.dove-mappa{border-radius:14px;overflow:hidden;height:360px;border:1px solid var(--border)}
-.dove-mappa #map{width:100%;height:100%}
-
-footer{background:var(--blu-d);padding:3.5rem 1.5rem 2rem}
-footer .container{display:flex;flex-direction:column;gap:2rem}
-.f-top{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:2rem}
-.f-logo{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:#fff;font-style:italic;margin-bottom:.5rem}
-.f-brand p{font-size:12px;color:rgba(255,255,255,.3);line-height:1.7}
-.f-col h4{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:1rem}
-.f-col a,.f-col p{display:block;font-size:13px;color:rgba(255,255,255,.45);text-decoration:none;margin-bottom:.5rem;line-height:1.6;transition:color .2s}
-.f-col a:hover{color:#fff}
-.f-bottom{border-top:1px solid rgba(255,255,255,.07);padding-top:1.5rem;font-size:11px;color:rgba(255,255,255,.22);display:flex;flex-wrap:wrap;gap:.75rem;justify-content:space-between}
-
-.wa-sticky{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;width:56px;height:56px;border-radius:50%;background:var(--wa);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.45);text-decoration:none;transition:transform .2s}
-.wa-sticky:hover{transform:scale(1.1)}
-.wa-sticky svg{width:28px;height:28px;color:#fff}
-
-.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;align-items:center;justify-content:center;padding:1rem}
-.mo.open{display:flex}
-.mo-box{background:#fff;border-radius:16px;max-width:580px;width:100%;max-height:85vh;overflow:hidden;display:flex;flex-direction:column}
-.mo-hdr{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.mo-hdr h3{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600}
-.mo-close{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--t2)}
-.mo-body{padding:1.5rem;overflow-y:auto;font-size:13px;line-height:1.9;color:var(--t2)}
-.mo-body h4{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text);margin:1.25rem 0 .4rem}
-.mo-body h4:first-child{margin-top:0}
-
-@media(max-width:900px){.f-top{grid-template-columns:1fr 1fr}.f-brand{grid-column:1/-1}}
-@media(max-width:768px){
-  nav{padding:0 1rem}
-  section{padding:3.5rem 1rem}
-  #chisiamo .inner,#orari .inner,#dove .inner{grid-template-columns:1fr;gap:2.5rem}
-  .cs-imgs .img-main{aspect-ratio:16/9}
-  .gallery-grid{grid-template-columns:1fr 1fr}
-  .g-big{grid-row:auto}
-  .g-big img,.g-item img{height:180px}
-  .dove-mappa{height:240px}
-  .f-top{grid-template-columns:1fr}.f-brand{grid-column:auto}
-  .hero-btns{flex-direction:column;align-items:center}
-  .numeri .container{grid-template-columns:1fr 1fr}
-}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--purple:#c084fc;--dark:#1a1a1a;--light:#faf9f7}
+body{font-family:'Inter',sans-serif;background:var(--light);color:var(--dark)}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif}
+#buy-banner{position:fixed;top:0;left:0;width:100%;background:#000;color:#fff;z-index:9999;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+#buy-banner p{font-size:14px;line-height:1.3}
+#buy-banner a{background:#ff4d00;color:#fff;text-decoration:none;padding:8px 18px;border-radius:4px;font-size:13px;font-weight:500;white-space:nowrap;flex-shrink:0}
+@media(max-width:600px){#buy-banner .dt{display:none}}
+@media(min-width:601px){#buy-banner .mob{display:none}}
+.hero{height:100vh;background:url('https://images.unsplash.com/photo-1562322140-8baeececf3df?w=1920&q=80') center/cover no-repeat;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;margin-top:44px}
+.hero::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.45)}
+.hero-c{position:relative;z-index:1;color:#fff;padding:0 20px}
+.hero-c h1{font-size:clamp(2.2rem,6vw,5rem);font-weight:300;letter-spacing:.04em}
+.hero-c p{font-size:1.05rem;margin-top:10px;opacity:.9;font-weight:300}
+.hero-c .stars{margin-top:14px;font-size:1.1rem;color:#ffd700}
+.hero-c a.cta{display:inline-block;margin-top:24px;padding:13px 34px;background:var(--purple);color:#fff;text-decoration:none;border-radius:2px;font-size:.95rem;letter-spacing:.06em}
+.numeri{display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-top:3px solid var(--purple)}
+@media(max-width:600px){.numeri{grid-template-columns:repeat(2,1fr)}}
+.num{padding:36px 16px;text-align:center;border-right:1px solid #eee}
+.num:last-child{border-right:none}
+.num span{display:block;font-family:'Cormorant Garamond',serif;font-size:2.8rem;color:var(--purple);font-weight:300}
+.num p{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:#666;margin-top:5px}
+.sec{padding:72px 5% 56px}
+.sec-t{font-size:clamp(1.8rem,4vw,3rem);font-weight:300;text-align:center;margin-bottom:10px}
+.sec-s{text-align:center;color:#666;font-size:.92rem;margin-bottom:44px}
+.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;max-width:1100px;margin:0 auto}
+.sc{background:#fff;padding:30px;border-radius:3px;border-left:3px solid var(--purple);box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.sc h3{font-size:1.25rem;font-weight:400;margin-bottom:8px}
+.sc p{color:#666;font-size:.88rem;line-height:1.6;margin-bottom:14px}
+.sc .price{font-size:1.35rem;color:var(--purple);font-family:'Cormorant Garamond',serif}
+.about{background:#fff;padding:72px 5%}
+.about-in{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+@media(max-width:768px){.about-in{grid-template-columns:1fr}}
+.about-imgs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.about-imgs img{width:100%;height:190px;object-fit:cover;border-radius:2px}
+.about-imgs img:first-child{grid-column:1/-1;height:240px}
+.about-t h2{font-size:2.2rem;font-weight:300;margin-bottom:18px}
+.about-t p{color:#555;line-height:1.8;margin-bottom:14px}
+.gallery{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+@media(max-width:600px){.gallery{grid-template-columns:repeat(2,1fr)}}
+.gallery img{width:100%;height:200px;object-fit:cover}
+.testi{background:var(--purple);padding:72px 5%;color:#fff}
+.testi .sec-t{color:#fff}
+.testi .sec-s{color:rgba(255,255,255,.8)}
+.tg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;max-width:1000px;margin:0 auto}
+.tc{background:rgba(255,255,255,.12);padding:26px;border-radius:3px}
+.tc p{font-style:italic;line-height:1.7;margin-bottom:14px;font-family:'Cormorant Garamond',serif;font-size:1.05rem}
+.tc .name{font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;opacity:.8}
+.tc .stars{color:#ffd700;margin-bottom:8px}
+.orari{background:#fff;padding:72px 5%}
+.orari table{width:100%;max-width:560px;border-collapse:collapse;margin:28px auto 0}
+.orari td{padding:13px 0;border-bottom:1px solid #eee;font-size:.92rem}
+.orari td:last-child{text-align:right;color:var(--purple)}
+.faq{padding:72px 5%;background:var(--light)}
+.faq-in{max-width:780px;margin:0 auto}
+details{border-bottom:1px solid #e0e0e0;padding:18px 0}
+details summary{font-size:1rem;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details summary::after{content:'+';font-size:1.3rem;color:var(--purple)}
+details[open] summary::after{content:'−'}
+details p{color:#555;line-height:1.7;margin-top:12px;font-size:.92rem}
+#map{height:380px;width:100%}
+.contatti{background:#1a1a1a;color:#fff;padding:56px 5%;text-align:center}
+.contatti h2{font-size:1.9rem;font-weight:300;margin-bottom:8px}
+.contatti p{color:#aaa;margin-bottom:5px}
+.contatti a{color:var(--purple);text-decoration:none}
+footer{background:#111;color:#666;text-align:center;padding:22px;font-size:.78rem}
+footer a{color:#888;cursor:pointer}
+.wa{position:fixed;bottom:22px;right:22px;background:#25D366;color:#fff;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:24px;box-shadow:0 4px 16px rgba(37,211,102,.4);z-index:8888}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99999;align-items:center;justify-content:center}
+.modal.open{display:flex}
+.modal-box{background:#fff;padding:36px;max-width:580px;width:90%;max-height:80vh;overflow-y:auto;border-radius:3px}
+.modal-box h3{margin-bottom:14px;font-size:1.5rem;font-weight:300}
+.modal-box p{color:#555;line-height:1.7;font-size:.88rem;margin-bottom:8px}
+.modal-close{float:right;background:none;border:1px solid #ccc;padding:5px 12px;cursor:pointer;border-radius:2px}
 </style>
 </head>
 <body>
-
-<nav>
-  <div class="nav-logo"><em>Paolo</em> Hair Stylist</div>
-  <div class="nav-links">
-    <a href="#servizi">Servizi</a>
-    <a href="#chisiamo">Chi siamo</a>
-    <a href="#orari">Orari</a>
-    <a href="https://wa.me/393312763139" target="_blank" rel="noopener" class="nav-cta">WhatsApp</a>
-  </div>
-</nav>
-
-<div class="pbanner">✦ Bologna · Via Milazzo 19/B · <span>Prenota il tuo appuntamento</span></div>
-
-<section class="hero" id="home">
-  <div class="hero-bg"></div>
-  <div class="hero-ov"></div>
-  <div class="hero-c fade">
-    <p class="hero-tag">Parrucchiere · Bologna Centro</p>
-    <h1>Paolo</h1>
-    <span class="hero-amp">Hair Stylist</span>
-    <p class="hero-sub">Taglio, colore e styling con passione e precisione.<br>Un'esperienza su misura per ogni cliente.</p>
-    <p class="hero-addr">📍 Via Milazzo 19/B, Bologna</p>
-    <div class="hero-btns">
-      <a href="https://wa.me/393312763139" class="btn-wa" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a6.73 6.73 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.852L.057 23.55a.75.75 0 00.921.921l5.696-1.471A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.713 9.713 0 01-4.964-1.362l-.356-.212-3.685.951.975-3.585-.232-.368A9.712 9.712 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg>
-        Scrivici su WhatsApp
-      </a>
-      <a href="tel:+393312763139" class="btn-tel">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.04 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>
-        +39 331 276 3139
-      </a>
-    </div>
-  </div>
-  <div class="hero-rating">
-    <span class="hr-stars">★★★★★</span>
-    <span class="hr-score">5.0</span>
-    <span class="hr-label">· 75 recensioni su Google</span>
+<div id="buy-banner">
+  <p class="dt">Ti piace questo sito? Il tuo potrebbe essere identico — online in 5 giorni per €99</p>
+  <p class="mob">Vuoi un sito così? €99</p>
+  <a href="https://buy.stripe.com/8x25kC7mo39M0bN1Mv1B601" target="_blank">Inizia ora →</a>
+</div>
+<section class="hero">
+  <div class="hero-c">
+    <h1>Paolo Hair Stylist</h1>
+    <p>V. Milazzo, 19/B · Bologna</p>
+    <div class="stars">★★★★½ 4.7 · 75 recensioni</div>
+    <a href="https://wa.me/393312763139" class="cta" target="_blank">Prenota su WhatsApp</a>
   </div>
 </section>
-
 <div class="numeri">
-  <div class="container">
-    <div class="fade"><div class="num-val">5.0</div><div class="num-label">Rating Google</div></div>
-    <div class="fade d1"><div class="num-val">75</div><div class="num-label">Recensioni verificate</div></div>
-    <div class="fade d2"><div class="num-val">10+</div><div class="num-label">Anni di esperienza</div></div>
-    <div class="fade d3"><div class="num-val">Bologna</div><div class="num-label">Via Milazzo</div></div>
-  </div>
+  <div class="num"><span>4.7</span><p>Rating Google</p></div>
+  <div class="num"><span>75</span><p>Recensioni</p></div>
+  <div class="num"><span>15+</span><p>Anni esperienza</p></div>
+  <div class="num"><span>Bologna</span><p>Città</p></div>
 </div>
-
-<section id="servizi">
-  <div class="container">
-    <p class="s-label fade">Cosa offriamo</p>
-    <h2 class="s-title fade">I nostri <em>servizi</em></h2>
-    <p class="s-sub fade">Ogni servizio è pensato per valorizzare il tuo stile. Utilizziamo prodotti professionali selezionati per la salute e la bellezza dei tuoi capelli.</p>
-    <div class="svc-grid">
-      <div class="svc-card fade">
-        <div class="svc-icon">✂️</div>
-        <div class="svc-name">Taglio uomo</div>
-        <div class="svc-desc">Taglio classico o moderno, personalizzato in base alla forma del viso e alle tue preferenze. Consulenza inclusa.</div>
-        <div class="svc-price"><sup>€</sup>20</div><div class="svc-from">a partire da</div>
-      </div>
-      <div class="svc-card fade d1">
-        <div class="svc-icon">💈</div>
-        <div class="svc-name">Barba</div>
-        <div class="svc-desc">Rifinitura, rasatura classica con rasoio o modellatura completa della barba. Precisione e cura artigianale.</div>
-        <div class="svc-price"><sup>€</sup>15</div><div class="svc-from">a partire da</div>
-      </div>
-      <div class="svc-card fade d2">
-        <div class="svc-icon">✂️</div>
-        <div class="svc-name">Taglio donna</div>
-        <div class="svc-desc">Taglio personalizzato con consulenza iniziale su forma del viso, struttura del capello e stile di vita.</div>
-        <div class="svc-price"><sup>€</sup>30</div><div class="svc-from">a partire da</div>
-      </div>
-      <div class="svc-card fade d3">
-        <div class="svc-icon">🎨</div>
-        <div class="svc-name">Colore</div>
-        <div class="svc-desc">Tinta intera, ricrescita o schiariture con colori professionali. Copertura perfetta e risultati naturali duraturi.</div>
-        <div class="svc-price"><sup>€</sup>45</div><div class="svc-from">a partire da</div>
-      </div>
-      <div class="svc-card fade">
-        <div class="svc-icon">✨</div>
-        <div class="svc-name">Colpi di luce</div>
-        <div class="svc-desc">Meches, balayage o schiariture su misura per illuminare il colore naturale senza effetti artificiali.</div>
-        <div class="svc-price"><sup>€</sup>60</div><div class="svc-from">a partire da</div>
-      </div>
-      <div class="svc-card fade d1">
-        <div class="svc-icon">💆</div>
-        <div class="svc-name">Trattamenti</div>
-        <div class="svc-desc">Maschere ristrutturanti, anticrespo e keratina per capelli forti, idratati e sani dall'interno.</div>
-        <div class="svc-price"><sup>€</sup>25</div><div class="svc-from">a partire da</div>
-      </div>
-    </div>
-    <div class="svc-footer fade">I prezzi variano in base a lunghezza e struttura del capello. Per un preventivo scrivi su <a href="https://wa.me/393312763139" style="color:var(--blu);text-decoration:none;font-weight:500">WhatsApp</a> — rispondiamo entro poche ore.</div>
+<section class="sec" style="background:var(--light)">
+  <h2 class="sec-t">I Nostri Servizi</h2>
+  <p class="sec-s">Trattamenti professionali per ogni esigenza</p>
+  <div class="services">
+    <div class="sc"><h3>Taglio Donna</h3><p>Taglio su misura con consulenza personalizzata.</p><div class="price">da €35</div></div>
+    <div class="sc"><h3>Colore & Meches</h3><p>Colorazioni professionali con prodotti di alta qualità.</p><div class="price">da €55</div></div>
+    <div class="sc"><h3>Piega & Styling</h3><p>Piega professionale per ogni occasione.</p><div class="price">da €20</div></div>
+    <div class="sc"><h3>Trattamenti Capelli</h3><p>Maschere nutrienti, cheratina e ricostruzione.</p><div class="price">da €30</div></div>
+    <div class="sc"><h3>Taglio Uomo</h3><p>Taglio classico o moderno con finiture impeccabili.</p><div class="price">da €20</div></div>
+    <div class="sc"><h3>Acconciature Sposa</h3><p>Acconciature per matrimoni ed eventi speciali.</p><div class="price">da €80</div></div>
   </div>
 </section>
-
-<section id="chisiamo">
-  <div class="container">
-    <div class="inner">
-      <div class="cs-imgs fade">
-        <div class="img-main"><img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=900&q=85" alt="Interno salone Paolo" loading="lazy"/></div>
-        <div class="img-sm"><img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=500&q=85" alt="Taglio professionale" loading="lazy"/></div>
-        <div class="img-sm"><img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=500&q=85" alt="Styling capelli" loading="lazy"/></div>
-      </div>
-      <div class="fade d1">
-        <p class="s-label">Chi siamo</p>
-        <h2 class="s-title">Un parrucchiere <em>di fiducia</em><br>nel cuore di Bologna</h2>
-        <div class="divider"></div>
-        <p class="cs-body">Paolo Hair Stylist è nato dalla passione per il taglio e dalla voglia di offrire un'esperienza autentica, dove ogni cliente viene ascoltato e valorizzato. Siamo in Via Milazzo, a due passi dal centro di Bologna, e ogni giorno lavoriamo per meritare la fiducia di chi ci sceglie.</p>
-        <p class="cs-body">Con 75 recensioni a 5 stelle su Google, la nostra reputazione parla da sola. Ci aggiorniamo costantemente sulle ultime tendenze — dai tagli moderni ai colori naturali — perché la cura del capello è prima di tutto cura di sé.</p>
-        <div class="cs-valori">
-          <div class="val-item"><div class="val-icon">⭐</div><div class="val-title">75 recensioni 5 stelle</div><div class="val-desc">La fiducia dei clienti è la nostra migliore pubblicità</div></div>
-          <div class="val-item"><div class="val-icon">👂</div><div class="val-title">Ascolto e consulenza</div><div class="val-desc">Ogni visita inizia da una consulenza personale</div></div>
-          <div class="val-item"><div class="val-icon">✂️</div><div class="val-title">Precisione artigianale</div><div class="val-desc">Ogni taglio è curato nei minimi dettagli</div></div>
-          <div class="val-item"><div class="val-icon">🌿</div><div class="val-title">Prodotti professionali</div><div class="val-desc">Solo marchi selezionati per la salute del capello</div></div>
-        </div>
-      </div>
+<section class="about">
+  <div class="about-in">
+    <div class="about-imgs">
+      <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&q=80" alt="Salone">
+      <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80" alt="Team">
+      <img src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=600&q=80" alt="Prodotti">
+    </div>
+    <div class="about-t">
+      <h2>Chi Siamo</h2>
+      <p>Siamo un salone con oltre 15 anni di esperienza nel cuore di Bologna. La nostra passione per i capelli si riflette in ogni servizio.</p>
+      <p>Il nostro team si aggiorna costantemente sulle ultime tendenze per offrirti sempre il meglio.</p>
+      <p>Utilizziamo solo prodotti di qualità professionale, rispettosi dei capelli e dell'ambiente.</p>
     </div>
   </div>
 </section>
-
-<section id="galleria">
-  <div class="container">
-    <p class="s-label fade">Il nostro lavoro</p>
-    <h2 class="s-title fade">Galleria <em>lavori</em></h2>
-    <p class="s-sub fade">Ogni cliente è unico. Ecco alcune creazioni realizzate nel nostro salone — tagli, colori e styling pensati su misura.</p>
-    <div class="gallery-grid">
-      <div class="g-item g-big fade"><img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=600&q=85" alt="Taglio uomo moderno" loading="lazy"/></div>
-      <div class="g-item fade d1"><img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=600&q=85" alt="Taglio e styling" loading="lazy"/></div>
-      <div class="g-item fade d2"><img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&q=85" alt="Colorazione professionale" loading="lazy"/></div>
-      <div class="g-item fade d1"><img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=600&q=85" alt="Barba curata" loading="lazy"/></div>
-      <div class="g-item fade d2"><img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=600&q=85" alt="Interno salone" loading="lazy"/></div>
-    </div>
-  </div>
-</section>
-
-<section id="testimonianze" style="padding:5.5rem 1.5rem">
-  <div class="container">
-    <p class="s-label fade">Cosa dicono di noi</p>
-    <h2 class="s-title fade">I nostri <em>clienti</em></h2>
-    <div class="testi-grid">
-      <div class="testi-card fade">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"Il miglior parrucchiere di Bologna. Paolo capisce subito quello che vuoi e il risultato è sempre perfetto. Lo consiglio a tutti, non cambierei mai."</p>
-        <div class="testi-author"><div class="testi-av">M</div><div><div class="testi-name">Marco B.</div><div class="testi-meta">Cliente da 4 anni · Google</div></div></div>
-      </div>
-      <div class="testi-card fade d1">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"Ambiente accogliente, personale gentilissimo e professionale. Ho fatto il colore e sono rimasta senza parole: naturale, luminoso, perfetto."</p>
-        <div class="testi-author"><div class="testi-av">A</div><div><div class="testi-name">Anna R.</div><div class="testi-meta">Cliente · Google</div></div></div>
-      </div>
-      <div class="testi-card fade d2">
-        <div class="testi-stars">★★★★★</div>
-        <p class="testi-text">"Finalmente un parrucchiere preciso e puntuale. Prezzi onesti, qualità altissima. 75 recensioni a 5 stelle non mentono — è davvero il top."</p>
-        <div class="testi-author"><div class="testi-av">L</div><div><div class="testi-name">Luca T.</div><div class="testi-meta">Cliente · Google</div></div></div>
-      </div>
-    </div>
-    <p class="testi-source fade">⭐ 5.0 su Google · 75 recensioni verificate</p>
-  </div>
-</section>
-
-<section id="orari">
-  <div class="container">
-    <div class="inner">
-      <div class="fade">
-        <p class="s-label">Quando trovarci</p>
-        <h2 class="s-title">Orari di <em>apertura</em></h2>
-        <div class="divider"></div>
-        <div class="orari-wrap" id="orari-wrap"></div>
-        <div class="orari-note">📞 Per appuntamenti chiama il <strong>+39 331 276 3139</strong> o scrivici su WhatsApp — rispondiamo anche durante il lavoro.</div>
-        <div class="orari-cta">
-          <a href="https://wa.me/393312763139" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a6.73 6.73 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.852L.057 23.55a.75.75 0 00.921.921l5.696-1.471A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.713 9.713 0 01-4.964-1.362l-.356-.212-3.685.951.975-3.585-.232-.368A9.712 9.712 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg>
-            Scrivici su WhatsApp
-          </a>
-        </div>
-      </div>
-      <div class="fade d1">
-        <p class="s-label">Domande frequenti</p>
-        <h2 class="s-title" style="margin-bottom:1.5rem">FAQ</h2>
-        <div id="faq-wrap"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="dove">
-  <div class="container">
-    <p class="s-label fade">Come raggiungerci</p>
-    <h2 class="s-title fade">Dove <em>siamo</em></h2>
-    <p class="s-sub fade">Siamo in Via Milazzo 19/B, nel cuore di Bologna, facilmente raggiungibile a piedi dalla stazione e dal centro.</p>
-    <div class="inner">
-      <div class="dove-info fade">
-        <div class="dove-item">
-          <div class="dove-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/></svg></div>
-          <div><div class="dove-lbl">Indirizzo</div><div class="dove-val">Via Milazzo 19/B<br>40121 Bologna (BO)<br><span style="font-size:12px;color:var(--t3)">Zona Stazione / Centro</span></div></div>
-        </div>
-        <div class="dove-item">
-          <div class="dove-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.04 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg></div>
-          <div><div class="dove-lbl">Telefono</div><div class="dove-val"><a href="tel:+393312763139">+39 331 276 3139</a></div></div>
-        </div>
-        <div class="dove-item">
-          <div class="dove-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a6.73 6.73 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.852L.057 23.55a.75.75 0 00.921.921l5.696-1.471A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.713 9.713 0 01-4.964-1.362l-.356-.212-3.685.951.975-3.585-.232-.368A9.712 9.712 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg></div>
-          <div><div class="dove-lbl">WhatsApp</div><div class="dove-val"><a href="https://wa.me/393312763139" target="_blank" rel="noopener">Scrivici ora →</a></div></div>
-        </div>
-        <a href="https://maps.google.com/?q=Via+Milazzo+19+Bologna+40121" target="_blank" rel="noopener" class="maps-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13V7m0 13l6-3m-6-10l6-3m0 13l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4"/></svg>
-          Apri su Google Maps
-        </a>
-      </div>
-      <div class="dove-mappa fade d1"><div id="map"></div></div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="container">
-    <div class="f-top">
-      <div class="f-brand">
-        <div class="f-logo">Paolo Hair Stylist</div>
-        <p>Parrucchiere a Bologna. Taglio, colore, barba e trattamenti professionali in Via Milazzo 19/B.</p>
-      </div>
-      <div class="f-col">
-        <h4>Contatti</h4>
-        <a href="tel:+393312763139">+39 331 276 3139</a>
-        <a href="https://wa.me/393312763139" target="_blank" rel="noopener">WhatsApp</a>
-        <p>Via Milazzo 19/B<br>40121 Bologna</p>
-      </div>
-      <div class="f-col">
-        <h4>Info</h4>
-        <a href="#servizi">Servizi e prezzi</a>
-        <a href="#orari">Orari</a>
-        <a href="#dove">Come raggiungerci</a>
-        <a href="#" onclick="openPrivacy();return false;">Privacy Policy</a>
-      </div>
-    </div>
-    <div class="f-bottom">
-      <span>© 2025 Paolo Hair Stylist · Bologna · Tutti i diritti riservati</span>
-      <span>⭐ 75 recensioni Google 5 stelle</span>
-    </div>
-  </div>
-</footer>
-
-<a href="https://wa.me/393312763139" class="wa-sticky" target="_blank" rel="noopener" aria-label="WhatsApp">
-  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a6.73 6.73 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.852L.057 23.55a.75.75 0 00.921.921l5.696-1.471A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.713 9.713 0 01-4.964-1.362l-.356-.212-3.685.951.975-3.585-.232-.368A9.712 9.712 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg>
-</a>
-
-<div class="mo" id="privacyModal" onclick="if(event.target===this)closePrivacy()">
-  <div class="mo-box">
-    <div class="mo-hdr"><h3>Privacy Policy</h3><button class="mo-close" onclick="closePrivacy()">×</button></div>
-    <div class="mo-body">
-      <h4>Titolare</h4><p>Paolo Hair Stylist — Via Milazzo 19/B, 40121 Bologna · +39 331 276 3139</p>
-      <h4>Dati raccolti</h4><p>Questo sito non raccoglie dati tramite form, cookie di profilazione o analytics. I dati sono trattati solo se l'utente contatta volontariamente il titolare via telefono o WhatsApp.</p>
-      <h4>Cookie</h4><p>Nessun cookie di profilazione o di terze parti. Non è richiesto il banner cookie.</p>
-      <h4>Terze parti</h4><p>Google Fonts, Unsplash CDN e OpenStreetMap per la cartografia. I link a WhatsApp e Google Maps sono link esterni.</p>
-      <h4>Diritti</h4><p>Ai sensi del GDPR (Reg. UE 2016/679) puoi esercitare i tuoi diritti contattando il titolare ai recapiti sopra indicati.</p>
-      <h4>Aggiornamento</h4><p>Maggio 2025.</p>
-    </div>
-  </div>
+<div class="gallery">
+  <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80" alt="">
+  <img src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80" alt="">
+  <img src="https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?w=600&q=80" alt="">
+  <img src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=600&q=80" alt="">
+  <img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=600&q=80" alt="">
 </div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<section class="testi">
+  <h2 class="sec-t">Cosa Dicono di Noi</h2>
+  <p class="sec-s">Le recensioni dei nostri clienti soddisfatti</p>
+  <div class="tg">
+    <div class="tc"><div class="stars">★★★★★</div><p>"Finalmente ho trovato il mio salone di fiducia! Professionalità e gentilezza, risultati sempre perfetti."</p><div class="name">— Giulia M.</div></div>
+    <div class="tc"><div class="stars">★★★★★</div><p>"Ho fatto il colore qui per la prima volta e sono rimasta stupita. Capelli brillanti e sani."</p><div class="name">— Laura P.</div></div>
+    <div class="tc"><div class="stars">★★★★☆</div><p>"Ambiente accogliente e rilassante. Mi hanno consigliato il taglio perfetto per la mia forma del viso."</p><div class="name">— Martina F.</div></div>
+  </div>
+</section>
+<section class="orari">
+  <h2 class="sec-t">Orari di Apertura</h2>
+  <table>
+    <tr><td>Lunedì</td><td>Chiuso</td></tr>
+    <tr><td>Martedì</td><td>09:00 – 18:30</td></tr>
+    <tr><td>Mercoledì</td><td>09:00 – 18:30</td></tr>
+    <tr><td>Giovedì</td><td>09:00 – 18:30</td></tr>
+    <tr><td>Venerdì</td><td>09:00 – 19:00</td></tr>
+    <tr><td>Sabato</td><td>08:30 – 17:00</td></tr>
+    <tr><td>Domenica</td><td>Chiuso</td></tr>
+  </table>
+</section>
+<section class="faq">
+  <div class="faq-in">
+    <h2 class="sec-t">Domande Frequenti</h2>
+    <details><summary>Devo prenotare in anticipo?</summary><p>Consigliamo sempre di prenotare per garantire la disponibilità. Accettiamo anche clienti senza appuntamento quando possibile.</p></details>
+    <details><summary>Quanto dura un trattamento colore?</summary><p>Un colore completo richiede in media 2-3 ore. Per meches o balayage, prevedere 3-4 ore.</p></details>
+    <details><summary>Usate prodotti senza ammoniaca?</summary><p>Sì, offriamo sia colorazioni tradizionali che alternative senza ammoniaca per capelli sensibili.</p></details>
+    <details><summary>Fate acconciature per matrimoni?</summary><p>Assolutamente sì! Offriamo un servizio completo per sposa con prova acconciatura inclusa.</p></details>
+    <details><summary>Quali metodi di pagamento accettate?</summary><p>Accettiamo contanti, carte di credito/debito e pagamenti digitali (Apple Pay, Google Pay).</p></details>
+  </div>
+</section>
+<div id="map"></div>
 <script>
-const ORARI=[
-  {g:'Lunedì',d:'09:00',f:'19:00',a:true},{g:'Martedì',d:'09:00',f:'19:00',a:true},
-  {g:'Mercoledì',d:'09:00',f:'19:00',a:true},{g:'Giovedì',d:'09:00',f:'19:00',a:true},
-  {g:'Venerdì',d:'09:00',f:'19:00',a:true},{g:'Sabato',d:'09:00',f:'17:00',a:true},
-  {g:'Domenica',d:'',f:'',a:false}
-];
-const dow=new Date().getDay();
-const todayIdx=dow===0?6:dow-1;
-document.getElementById('orari-wrap').innerHTML=ORARI.map((o,i)=>`
-  <div class="o-row${i===todayIdx?' o-today':''}">
-    <span class="o-day">${o.g}</span>
-    <span class="o-time${!o.a?' o-closed':''}">${o.a?o.d+'–'+o.f:'Chiuso'}</span>
-  </div>`).join('');
-
-const FAQS=[
-  {q:'Devo prenotare o posso venire senza appuntamento?',a:'Accettiamo entrambe le modalità, ma ti consigliamo di contattarci su WhatsApp o per telefono prima di venire, soprattutto il sabato, per essere sicuro di trovare posto.'},
-  {q:'Fate anche taglio e barba insieme?',a:'Sì, offriamo il pacchetto taglio + barba a prezzo vantaggioso. Contattaci per i dettagli o chiedi direttamente in salone.'},
-  {q:'Avete prodotti per capelli sensibili?',a:'Sì, utilizziamo prodotti specifici per cute sensibile e capelli trattati. Segnalacelo prima del servizio e troveremo la soluzione più adatta.'},
-  {q:'Come posso chiedere un preventivo?',a:'Il modo più rapido è WhatsApp al +39 331 276 3139. Rispondiamo entro poche ore. Puoi anche chiamarci negli orari di apertura.'},
-  {q:'Siete vicini alla stazione di Bologna?',a:'Sì, siamo in Via Milazzo 19/B, a pochi minuti a piedi dalla Stazione Centrale di Bologna. Facilmente raggiungibile anche con i mezzi pubblici.'}
-];
-document.getElementById('faq-wrap').innerHTML=FAQS.map((f,i)=>`
-  <div class="faq-item" id="fq${i}">
-    <button class="faq-q" onclick="toggleFaq(${i})">${f.q}<span class="arr">+</span></button>
-    <div class="faq-a"><p>${f.a}</p></div>
-  </div>`).join('');
-function toggleFaq(i){
-  const el=document.getElementById('fq'+i);
-  const open=el.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(e=>e.classList.remove('open'));
-  if(!open)el.classList.add('open');
-}
-
-const LAT=44.5074,LNG=11.3467;
-const map=L.map('map',{zoomControl:true,scrollWheelZoom:false}).setView([LAT,LNG],16);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:19}).addTo(map);
-L.marker([LAT,LNG],{icon:L.divIcon({html:'<div style="width:32px;height:32px;background:#1a2744;border:3px solid #fff;border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 2px 10px rgba(0,0,0,.3)"></div>',iconSize:[32,32],iconAnchor:[16,32],className:''})}).addTo(map).bindPopup('<b>Paolo Hair Stylist</b><br>Via Milazzo 19/B<br>Bologna').openPopup();
-
-const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});},{threshold:.08});
-document.querySelectorAll('.fade').forEach(el=>obs.observe(el));
-
-function openPrivacy(){document.getElementById('privacyModal').classList.add('open');document.body.style.overflow='hidden';}
-function closePrivacy(){document.getElementById('privacyModal').classList.remove('open');document.body.style.overflow='';}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closePrivacy();});
+var map=L.map('map').setView([44.5037736,11.339109],15);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);
+L.marker([44.5037736,11.339109]).addTo(map).bindPopup('<b>Paolo Hair Stylist</b><br>V. Milazzo, 19/B').openPopup();
 </script>
-</body>
-</html>
+<section class="contatti">
+  <h2>Contattaci</h2>
+  <p style="margin-top:14px">V. Milazzo, 19/B, 40121 Bologna</p>
+  <p><a href="tel:+39 331 276 3139">+39 331 276 3139</a></p>
+  <p style="margin-top:18px"><a href="https://wa.me/393312763139" target="_blank" style="background:var(--purple);color:#fff;padding:11px 26px;border-radius:2px;text-decoration:none;display:inline-block">Scrivici su WhatsApp</a></p>
+</section>
+<footer>
+  <p>© 2025 Paolo Hair Stylist · V. Milazzo, 19/B, 40121 Bologna · <a onclick="document.getElementById('pm').classList.add('open')">Privacy Policy</a></p>
+</footer>
+<div id="pm" class="modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('pm').classList.remove('open')">Chiudi</button>
+    <h3>Privacy Policy</h3>
+    <p>Il presente sito non raccoglie dati personali, non usa cookie di profilazione e non effettua tracking analytics.</p>
+    <p>Titolare: Paolo Hair Stylist, V. Milazzo, 19/B, 40121 Bologna. Contatto: <a href="tel:+39 331 276 3139">+39 331 276 3139</a>.</p>
+    <p>Ultimo aggiornamento: maggio 2025.</p>
+  </div>
+</div>
+<a href="https://wa.me/393312763139" class="wa" target="_blank">&#x1F4AC;</a>
+</body></html>
